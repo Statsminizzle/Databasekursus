@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/** @author Ronnie Dalsgaard */
 public class Connector {
     private final String HOST     = "185.121.172.103";
     private final int    PORT     = 3306;

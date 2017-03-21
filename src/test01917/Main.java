@@ -1,6 +1,7 @@
 package test01917;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 /*import daoimpl01917.MySQLOperatoerDAO;
 import daointerfaces01917.DALException;
 import dto01917.OperatoerDTO;
@@ -15,9 +16,14 @@ public class Main {
 		Connector connector = new Connector();
 		Connection connection = connector.getConnection();
 		Statement st = connection.createStatement();
-        String sql = "insert into rolle (`rolle_id`, `rolle_navn`) VALUES ('2', 'Test')";
+        String sql = "insert into rolle (`rolle_navn`) VALUES ('Test')";
 
-        int update = st.executeUpdate(sql);
+        int update = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+        
+        ResultSet rs = st.getGeneratedKeys();
+        if (rs.next()){
+            System.out.println(rs.getInt(1));
+        }
 		
 		/*System.out.println("Operatoer nummer 3:");
 		MySQLOperatoerDAO opr = new MySQLOperatoerDAO();
