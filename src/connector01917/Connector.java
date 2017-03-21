@@ -1,7 +1,8 @@
-package dal;
+package connector01917;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,7 +13,7 @@ public class Connector {
     private final String DATABASE = "nizzledk_cdio";
     private final String USERNAME = "nizzledk_cdio"; 
     private final String PASSWORD = "P9f7gIA5TqZ2";
-    private Connection connection;
+    private static Connection connection;
     
     public Connector() {
         try {
@@ -30,14 +31,19 @@ public class Connector {
     	return connection;
     }
     
-    public ResultSet doQuery(String query) throws SQLException{
+    public static ResultSet doQuery(String query) throws SQLException{
         Statement stmt = connection.createStatement();
         ResultSet res = stmt.executeQuery(query);
         return res;
     }
     
-    public void doUpdate(String query) throws SQLException{
+    public static void doUpdate(String query) throws SQLException{
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(query);
     }
+    
+	public static PreparedStatement prepare(String sql) throws SQLException {
+		return connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+	}
+
 }
