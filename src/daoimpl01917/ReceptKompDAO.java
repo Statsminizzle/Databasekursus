@@ -14,7 +14,7 @@ import dto01917.ReceptKompDTO;
 public class ReceptKompDAO implements IReceptKompDAO {
 
 	@Override
-	public ReceptKompDTO getReceptKomp(int receptId, int raavareId) throws daointerfaces01917.DALException {
+	public ReceptKompDTO getReceptKomp(int receptId, int raavareId) throws DALException {
 		try {
 			PreparedStatement ps = Connector.prepare("SELECT nom_netto, tolerance FROM receptkomponent WHERE raavare_id = ? AND recept_id = ?");
 			ps.setInt(1, raavareId);
@@ -33,17 +33,14 @@ public class ReceptKompDAO implements IReceptKompDAO {
 	}
 
 	@Override
-	public List<ReceptKompDTO> getReceptKompList(int receptId) throws daointerfaces01917.DALException {
+	public List<ReceptKompDTO> getReceptKompList(int receptId) throws DALException {
 		List<ReceptKompDTO> list = new ArrayList<ReceptKompDTO>();
 		try {
-			PreparedStatement ps = Connector.prepare("SELECT raavare_id, nom_netto, tolerance FROM receptkomponent WHERE recept_id = ?");
-			ps.setInt(1, receptId);
-			ResultSet rs = ps.executeQuery();
+			ResultSet rs = Connector.doQuery("SELECT raavare_id, nom_netto, tolerance FROM receptkomponent WHERE recept_id = " + receptId);
 			if (!rs.first()) {
 				throw new DALException("No receipt with ID " + receptId + " could be found.");
 			} else {
 				do{
-					System.out.println(rs.getInt("recept_id"));
 					list.add(new ReceptKompDTO(receptId, rs.getInt("raavare_id"), rs.getDouble("nom_netto"), rs
 							.getDouble("tolerance")));
 				}while (rs.next());
@@ -55,7 +52,7 @@ public class ReceptKompDAO implements IReceptKompDAO {
 	}
 
 	@Override
-	public List<ReceptKompDTO> getReceptKompList() throws daointerfaces01917.DALException {
+	public List<ReceptKompDTO> getReceptKompList() throws DALException {
 		List<ReceptKompDTO> list = new ArrayList<ReceptKompDTO>();
 		try {
 			ResultSet rs = Connector.doQuery("SELECT recept_id, raavare_id, nom_netto, tolerance FROM receptkomponent");
@@ -70,7 +67,7 @@ public class ReceptKompDAO implements IReceptKompDAO {
 	}
 
 	@Override
-	public void createReceptKomp(ReceptKompDTO receptkomponent) throws daointerfaces01917.DALException {
+	public void createReceptKomp(ReceptKompDTO receptkomponent) throws DALException {
 		try {
 			PreparedStatement ps = Connector.prepare("INSERT INTO receptkomponent(recept_id, raavare_id, nom_netto, tolerance) VALUES (?,?,?,?)");
 			ps.setInt(1, receptkomponent.getReceptId());
@@ -84,7 +81,7 @@ public class ReceptKompDAO implements IReceptKompDAO {
 	}
 
 	@Override
-	public void updateReceptKomp(ReceptKompDTO receptkomponent) throws daointerfaces01917.DALException {
+	public void updateReceptKomp(ReceptKompDTO receptkomponent) throws DALException {
 		try {
 			PreparedStatement ps = Connector.prepare("UPDATE receptkomponent SET nom_netto = ?, tolerance = ? WHERE recept_id = ? AND raavare_id = ?");
 			ps.setDouble(1, receptkomponent.getNomNetto());

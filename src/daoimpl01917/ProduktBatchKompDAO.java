@@ -17,16 +17,16 @@ public class ProduktBatchKompDAO implements IProduktBatchKompDAO {
 
 	
 	@Override
-	public ProduktBatchKompDTO getProduktBatchKomp(int pbId, int rbId) throws DALException {
+	public ProduktBatchKompDTO getProduktBatchKomp(int pbID, int rbID) throws DALException {
 		try {
-			PreparedStatement ps = Connector.prepare("SELECT opr_cpr, tare, netto FROM produktbatchkomponent WHERE pb_id = ? && rb_id = ?");
-			ps.setInt(1, rbId);
-			ps.setInt(2, pbId);
+			PreparedStatement ps = Connector.prepare("SELECT opr_cpr, tara, netto FROM produktbatchkomponent WHERE pb_id = ? AND rb_id = ?");
+			ps.setInt(1, pbID);
+			ps.setInt(2, rbID);
 			ResultSet rs = ps.executeQuery();
 			if (!rs.first()) {
 				return null;
 			} else {
-				return new ProduktBatchKompDTO(pbId, rbId, rs.getString("opr_cpr"), rs.getDouble("tare"), rs.getDouble("netto"));
+				return new ProduktBatchKompDTO(pbID, rbID, rs.getString("opr_cpr"), rs.getDouble("tara"), rs.getDouble("netto"));
 			}
 		} catch (SQLException e) {
 			throw new DALException(e);
@@ -37,11 +37,11 @@ public class ProduktBatchKompDAO implements IProduktBatchKompDAO {
 	public List<ProduktBatchKompDTO> getProduktBatchKompList(int pbId) throws DALException {
 		List<ProduktBatchKompDTO> list = new ArrayList<ProduktBatchKompDTO>();
 		try {
-			PreparedStatement ps = Connector.prepare("SELECT rb_id, opr_cpr, tare, netto FROM produktbatchkomponent WHERE pb_id = ?");
+			PreparedStatement ps = Connector.prepare("SELECT rb_id, opr_cpr, tara, netto FROM produktbatchkomponent WHERE pb_id = ?");
 			ps.setInt(1, pbId);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				list.add(new ProduktBatchKompDTO(pbId, rs.getInt("rb_id"), rs.getString("opr_cpr"), rs.getDouble("tare"), rs.getDouble("netto")));
+				list.add(new ProduktBatchKompDTO(pbId, rs.getInt("rb_id"), rs.getString("opr_cpr"), rs.getDouble("tara"), rs.getDouble("netto")));
 			}
 		} catch (SQLException e) {
 			throw new DALException(e);
@@ -55,9 +55,9 @@ public class ProduktBatchKompDAO implements IProduktBatchKompDAO {
 	public List<ProduktBatchKompDTO> getProduktBatchKompList() throws DALException {
 		List<ProduktBatchKompDTO> list = new ArrayList<ProduktBatchKompDTO>();
 		try {
-			ResultSet rs = Connector.doQuery("SELECT pb_id, rb_id, opr_cpr, tare, netto FROM produktbatchkomponent");
+			ResultSet rs = Connector.doQuery("SELECT pb_id, rb_id, opr_cpr, tara, netto FROM produktbatchkomponent");
 			while (rs.next()) {
-				list.add(new ProduktBatchKompDTO(rs.getInt("pb_id"), rs.getInt("rb_id"), rs.getString("opr_cpr"), rs.getDouble("tare"), rs.getDouble("netto")));
+				list.add(new ProduktBatchKompDTO(rs.getInt("pb_id"), rs.getInt("rb_id"), rs.getString("opr_cpr"), rs.getDouble("tara"), rs.getDouble("netto")));
 			}
 		} catch (SQLException e) {
 			throw new DALException(e);
@@ -69,7 +69,7 @@ public class ProduktBatchKompDAO implements IProduktBatchKompDAO {
 	@Override
 	public void createProduktBatchKomp(ProduktBatchKompDTO produktbatchkomponent) throws DALException {
 		try {
-			PreparedStatement ps = Connector.prepare("INSERT INTO produktbatchkomponent(pb_id, rb_id, opr_cpr, tare, netto) VALUES (?,?,?,?,?)");
+			PreparedStatement ps = Connector.prepare("INSERT INTO produktbatchkomponent(pb_id, rb_id, opr_cpr, tara, netto) VALUES (?,?,?,?,?)");
 			ps.setInt(1, produktbatchkomponent.getPbId());
 			ps.setInt(2, produktbatchkomponent.getRbId());
 			ps.setString(3, produktbatchkomponent.getOprCpr());
@@ -85,7 +85,7 @@ public class ProduktBatchKompDAO implements IProduktBatchKompDAO {
 	@Override
 	public void updateProduktBatchKomp(ProduktBatchKompDTO produktbatchkomponent) throws DALException {
 		try {
-			PreparedStatement ps = Connector.prepare("UPDATE produktbatchkomponent SET tare = ?, netto = ?, opr_cpr = ? WHERE pb_id = ? AND rb_id = ?");
+			PreparedStatement ps = Connector.prepare("UPDATE produktbatchkomponent SET tara = ?, netto = ?, opr_cpr = ? WHERE pb_id = ? AND rb_id = ?");
 			ps.setDouble(1, produktbatchkomponent.getTara());
 			ps.setDouble(2, produktbatchkomponent.getNetto());
 			ps.setString(3, produktbatchkomponent.getOprCpr());

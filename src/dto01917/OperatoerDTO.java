@@ -18,13 +18,16 @@ public class OperatoerDTO
 	String ini;                                
 	/** Operatoer password min. 7 max. 8 karakterer */
 	String password;            
-
-	public OperatoerDTO(String oprCpr, String oprNavn, String ini, String password)
+	/** Operatoer rolle-id mellem 1-4 */
+	int rolle;
+	
+	public OperatoerDTO(String oprCpr, String oprNavn, String ini, String password, int rolle)
 	{
 		this.oprCpr = oprCpr;
 		this.oprNavn = oprNavn;
 		this.ini = ini;
 		this.password = password;
+		this.rolle = rolle;
 	}
 	
     public OperatoerDTO(OperatoerDTO opr)
@@ -33,9 +36,11 @@ public class OperatoerDTO
     	this.oprNavn = opr.getOprNavn();
     	this.ini = opr.getIni();
     	this.password = opr.getPassword();
+    	this.rolle = opr.getRolle();
     }
     
-    public String getOprCpr() { return oprCpr; }
+   
+	public String getOprCpr() { return oprCpr; }
 	public void setOprId(String oprCpr) { this.oprCpr = oprCpr; }
 	public String getOprNavn() { return oprNavn; }
 	public void setOprNavn(String oprNavn) { this.oprNavn = oprNavn; }
@@ -43,5 +48,7 @@ public class OperatoerDTO
 	public void setIni(String ini) { this.ini = ini; }
 	public String getPassword() { return password; }
 	public void setPassword(String password) { this.password = password; }
-	public String toString() { return oprCpr + "\t" + oprNavn + "\t" + ini + "\t" + password; }
+	public int getRolle() { return rolle; }
+	public void setRolle(int rolle) { this.rolle = rolle; }
+	public String toString() { return oprCpr + "\t" + oprNavn + "\t" + ini + "\t" + password + "\t" + rolle; }
 }

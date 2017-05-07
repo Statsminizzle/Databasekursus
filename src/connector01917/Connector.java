@@ -14,6 +14,7 @@ public class Connector {
     private final String USERNAME = "nizzledk_cdio"; 
     private final String PASSWORD = "P9f7gIA5TqZ2";
     private static Connection connection;
+    private static Connector instance;
     
     public Connector() {
         try {
@@ -27,23 +28,28 @@ public class Connector {
 		}
     }
     
+    public static Connector getInstance() {
+    	if (instance == null) {
+    		instance = new Connector();
+    	}
+    	
+    	return instance;
+    }
+    
     public Connection getConnection(){
     	return connection;
     }
     
     public static ResultSet doQuery(String query) throws SQLException{
-        Statement stmt = connection.createStatement();
-        ResultSet res = stmt.executeQuery(query);
-        return res;
+        return getInstance().getConnection().createStatement().executeQuery(query);
     }
     
     public static void doUpdate(String query) throws SQLException{
-        Statement stmt = connection.createStatement();
-        stmt.executeUpdate(query);
+        getInstance().getConnection().createStatement().executeUpdate(query);
     }
     
 	public static PreparedStatement prepare(String sql) throws SQLException {
-		return connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		return getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 	}
 
 }

@@ -14,7 +14,7 @@ import connector01917.Connector;
 public class ProduktBatchDAO implements IProduktBatchDAO {
 	
 	@Override
-	public ProduktBatchDTO getProduktBatch(int pbId) throws daointerfaces01917.DALException {
+	public ProduktBatchDTO getProduktBatch(int pbId) throws DALException {
 		try {
 			PreparedStatement ps = Connector.prepare("SELECT recept_id, status FROM produktbatch WHERE pb_id = ?");
 			ps.setInt(1, pbId);
@@ -22,7 +22,7 @@ public class ProduktBatchDAO implements IProduktBatchDAO {
 			if (!rs.first()) {
 				return null;
 			} else {
-				return new ProduktBatchDTO(pbId, rs.getInt("recept_id"), rs.getInt("status"));
+				return new ProduktBatchDTO(pbId, rs.getInt("status"), rs.getInt("recept_id"));
 			}
 		} catch (SQLException e) {
 			throw new DALException(e);
@@ -30,7 +30,7 @@ public class ProduktBatchDAO implements IProduktBatchDAO {
 	}
 
 	@Override
-	public List<ProduktBatchDTO> getProduktBatchList() throws daointerfaces01917.DALException {
+	public List<ProduktBatchDTO> getProduktBatchList() throws DALException {
 		List<ProduktBatchDTO> list = new ArrayList<ProduktBatchDTO>();
 		try {
 			ResultSet rs = Connector.doQuery("SELECT pb_id, recept_id, status FROM produktbatch");
@@ -44,7 +44,7 @@ public class ProduktBatchDAO implements IProduktBatchDAO {
 	}
 
 	@Override
-	public void createProduktBatch(ProduktBatchDTO produktbatch) throws daointerfaces01917.DALException {
+	public void createProduktBatch(ProduktBatchDTO produktbatch) throws DALException {
 		try {
 			PreparedStatement ps = Connector.prepare("INSERT INTO produktbatch (pb_id, recept_id, status) VALUES (?,?,?)");
 			ps.setInt(1, produktbatch.getPbId());
@@ -57,11 +57,11 @@ public class ProduktBatchDAO implements IProduktBatchDAO {
 	}
 
 	@Override
-	public void updateProduktBatch(ProduktBatchDTO produktbatch) throws daointerfaces01917.DALException {
+	public void updateProduktBatch(ProduktBatchDTO produktbatch) throws DALException {
 		try {
-			PreparedStatement ps = Connector.prepare("UPDATE produktbatch SET recept_id = ?, status = ? WHERE pb_id = ?");
-			ps.setInt(1, produktbatch.getReceptId());
-			ps.setInt(2, produktbatch.getStatus());
+			PreparedStatement ps = Connector.prepare("UPDATE produktbatch SET status = ?, recept_id = ? WHERE pb_id = ?");
+			ps.setInt(1, produktbatch.getStatus());
+			ps.setInt(2, produktbatch.getReceptId());
 			ps.setInt(3, produktbatch.getPbId());
 			ps.execute();
 		} catch (SQLException e) {
